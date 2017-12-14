@@ -31,25 +31,25 @@ DB_IMAGE="mariadb:latest"
 # Assign variables from arguments
 while [ "$1" != "" ]; do
     case $1 in
-        -CONTAINER_NAME  )   shift	
+        --CONTAINER_NAME  )   shift	
             CONTAINER_NAME=$1;;  
-        -DOMAINS  )   shift
+        --DOMAINS  )   shift
             DOMAINS=$1;;
-        -LETSENCRYPT_EMAIL ) shift
+        --LETSENCRYPT_EMAIL ) shift
             LETSENCRYPT_EMAIL=$1;;
-        -NETWORK ) shift
+        --NETWORK ) shift
             NETWORK=$1;;
-        -MYSQL_ROOT_PASSWORD ) shift
+        --MYSQL_ROOT_PASSWORD ) shift
             MYSQL_ROOT_PASSWORD=$1;;
-        -MYSQL_DATABASE ) shift
+        --MYSQL_DATABASE ) shift
             MYSQL_DATABASE=$1;;
-        -MYSQL_USER ) shift
+        --MYSQL_USER ) shift
             MYSQL_USER=$1;;
-        -MYSQL_PASSWORD ) shift
+        --MYSQL_PASSWORD ) shift
             MYSQL_PASSWORD=$1;;
-        -WORDPRESS_IMAGE ) shift
+        --WORDPRESS_IMAGE ) shift
             WORDPRESS_IMAGE=$1;;
-        -DB_IMAGE ) shift
+        --DB_IMAGE ) shift
             DB_IMAGE=$1;;
     esac
 shift
@@ -57,19 +57,19 @@ done
 
 if [ -z "$CONTAINER_NAME" ]
 then
-    echo "Please specify -CONTAINER_NAME parameter";
+    echo "Please specify --CONTAINER_NAME parameter";
     exit 1;
 fi
 
 if [ -z "$DOMAINS" ]
 then
-    echo "Please specify -DOMAINS parameter";
+    echo "Please specify --DOMAINS parameter";
     exit 1;
 fi
 
 if [ -z "$LETSENCRYPT_EMAIL" ]
 then
-    echo "Please specify -LETSENCRYPT_EMAIL parameter";
+    echo "Please specify --LETSENCRYPT_EMAIL parameter";
     exit 1;
 fi
 
