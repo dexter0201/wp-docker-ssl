@@ -169,6 +169,17 @@ fi
 mkdir -p $WEB_BASE_PATH
 
 yes | cp -f "$INSTALL_DIR/docker-compose.yml.tmpl" "$WEB_BASE_PATH/docker-compose.yml"
+yes | cp -f "$INSTALL_DIR/.env.tmpl" "$WEB_BASE_PATH/.env"
+
+sed -i "s/domain.com,www.domain.com/$DOMAINS/g" "$WEB_BASE_PATH/.env"
+sed -i "s/user@domain.com/$LETSENCRYPT_EMAIL/g" "$WEB_BASE_PATH/.env"
+sed -i "s/mysqlrootpassword/$MYSQL_ROOT_PASSWORD/g" "$WEB_BASE_PATH/.env"
+sed -i "s/mysqldatabase/$MYSQL_DATABASE/g" "$WEB_BASE_PATH/.env"
+sed -i "s/mysqluser/$MYSQL_USER/g" "$WEB_BASE_PATH/.env"
+sed -i "s/mysqlpassword/$MYSQL_PASSWORD/g" "$WEB_BASE_PATH/.env"
+sed -i "s/networkname/$NETWORK/g" "$WEB_BASE_PATH/.env"
+sed -i "s/mariadb:latest/$DB_IMAGE/g" "$WEB_BASE_PATH/.env"
+sed -i "s/wordpress:latest/$WORDPRESS_IMAGE/g" "$WEB_BASE_PATH/.env"
 
 cd $WEB_BASE_PATH || exit
 
