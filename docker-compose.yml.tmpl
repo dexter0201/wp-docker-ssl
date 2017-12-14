@@ -6,7 +6,7 @@ services:
      image: ${DB_IMAGE}
      restart: unless-stopped
      volumes:
-        - ${DB_PATH}:/var/lib/mysql
+        - ./db:/var/lib/mysql
      environment:
        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
        MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -20,8 +20,8 @@ services:
      image: ${WORDPRESS_IMAGE}
      restart: unless-stopped
      volumes:
-       - ${WP_CORE}:/var/www/html
-       - ${WP_CONTENT}:/var/www/html/wp-content
+       - ./html:/var/www/html
+       - ./html/wp-content:/var/www/html/wp-content
      environment:
        WORDPRESS_DB_HOST: ${CONTAINER_DB_NAME}:3306
        WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
