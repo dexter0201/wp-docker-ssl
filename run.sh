@@ -2,8 +2,8 @@
 
 INSTALL_DIR=$PWD
 COMPANION_INSTALLLED=1
-WORDPRESS_IMAGE=wordpress:latest
-DB_IMAGE=mariadb:latest
+WORDPRESS_IMAGE="wordpress:latest"
+DB_IMAGE="mariadb:latest"
 
 #
 # Network name
@@ -11,25 +11,25 @@ DB_IMAGE=mariadb:latest
 # Your container app must use a network conencted to your webproxy 
 # https://github.com/evertramos/docker-compose-letsencrypt-nginx-proxy-companion
 #
-NETWORK=webproxy
+NETWORK="webproxy"
 
 # Path to store your database
-DB_PATH=/path/to/your/local/database/folder
+DB_PATH="/path/to/your/local/database/folder"
 
 # Root password for your database
-MYSQL_ROOT_PASSWORD=mysqlrootpassword
+MYSQL_ROOT_PASSWORD="mysqlrootpassword"
 
 # Database name, user and password for your wordpress
-MYSQL_DATABASE=mysqldatabase
-MYSQL_USER=mysqluser
-MYSQL_PASSWORD=mysqlpassword
+MYSQL_DATABASE="mysqldatabase"
+MYSQL_USER="mysqluser"
+MYSQL_PASSWORD="mysqlpassword"
 
 # Path to store your wordpress files
-WP_CORE=/path/to/your/wordpress/core/files
-WP_CONTENT=/path/to/your/wordpress/wp-content
+WP_CORE="/path/to/your/wordpress/core/files"
+WP_CONTENT="/path/to/your/wordpress/wp-content"
 
 # Table prefix
-WORDPRESS_TABLE_PREFIX=wp_
+WORDPRESS_TABLE_PREFIX="wp_"
 
 while [ "$1" != "" ]; do
     case $1 in
@@ -133,8 +133,9 @@ if [ ! "$(docker ps -q -f name=nginx-letsencrypt)" ]; then
     COMPANION_INSTALLLED=0;
 fi
 
-if [ COMPANION_INSTALLLED = "0" ]
+if [ $COMPANION_INSTALLLED = "0" ]
 then
+    echo "Installing companion"
     # Stop and remove existing containers
     docker stop nginx-web
     docker rm nginx-web
@@ -155,14 +156,14 @@ then
 
     # Copy environtment file
     echo 'Copy "docker-compose-letsencrypt-nginx-proxy-companion/.env.example" to "docker-compose-letsencrypt-nginx-proxy-companion/.env" file'
-    yes | cp -f "$INSTALL_DIR/companion/.env.sample" "$INSTALL_DIR/docker-compose-letsencrypt-nginx-proxy-companion/.env"
+    yes | cp -f "$INSTALL_DIR/docker-compose-letsencrypt-nginx-proxy-companion/.env.sample" "$INSTALL_DIR/docker-compose-letsencrypt-nginx-proxy-companion/.env"
 
     # Replace environtment settings
     sed -i "s#/path/to/your/nginx/data#$INSTALL_DIR/nginx-conf#g" "$INSTALL_DIR/docker-compose-letsencrypt-nginx-proxy-companion/.env"
 
     # Run the docker-compose-letsencrypt-nginx-proxy-companion installer
     cd "$INSTALL_DIR/docker-compose-letsencrypt-nginx-proxy-companion" || exit
-    ./run.sh
+    ./start.sh
 fi
 
 mkdir -p $WEB_BASE_PATH
@@ -170,4 +171,5 @@ mkdir -p $WEB_BASE_PATH
 yes | cp -f "$INSTALL_DIR/docker-compose.yml.tmpl" "$WEB_BASE_PATH/docker-compose.yml"
 
 cd $WEB_BASE_PATH || exit
+
 docker-compose up -d
