@@ -167,7 +167,7 @@ fi
 
 mkdir -p $WEB_BASE_PATH
 
-yes | cp -f "$INSTALL_DIR/docker-compose.yml" "$WEB_BASE_PATH/docker-compose.yml"
+yes | cp -f "$INSTALL_DIR/docker-compose.yml.tmpl" "$WEB_BASE_PATH/docker-compose.yml"
 
 cd $WEB_BASE_PATH || exit
 docker-compose up -d
