@@ -21,5 +21,5 @@ Install Wordpress in Docker with SSL enabled integrated with NGINX proxy and aut
  6. `--MYSQL_DATABASE` (Optional, Default = random string 6 characters)
  7. `--MYSQL_USER` (Optional, Default = random string 6 characters)
  8. `--MYSQL_PASSWORD` (Optional, Default = random string 20 characters)
- 8. `--WORDPRESS_IMAGE` (Optional, Default = wordpress:latest)
- 9. `--DB_IMAGE` (Optional, Default = mariadb:latest)
+ 8. `--WORDPRESS_IMAGE` (Optional, Default = wordpress:latest, Available tags: https://hub.docker.com/_/wordpress/)
+ 9. `--DB_IMAGE` (Optional, Default = mariadb:latest, Available tags https://hub.docker.com/_/mariadb/, https://hub.docker.com/_/mysql/)
