@@ -179,9 +179,9 @@ sed -i "s/mysqluser/$MYSQL_USER/g" "$WEB_BASE_PATH/.env"
 sed -i "s/mysqlpassword/$MYSQL_PASSWORD/g" "$WEB_BASE_PATH/.env"
 sed -i "s/networkname/$NETWORK/g" "$WEB_BASE_PATH/.env"
 sed -i "s/mariadb:latest/$DB_IMAGE/g" "$WEB_BASE_PATH/.env"
-sed -i "s/containerdbname/$CONTAINER_DB_NAME/g" "$WEB_BASE_PATH/.env"
+sed -i "s/containerdbname/$CONTAINER_NAME/g" "$WEB_BASE_PATH/.env"
 sed -i "s/wordpress:latest/$WORDPRESS_IMAGE/g" "$WEB_BASE_PATH/.env"
-sed -i "s/containerwpname/$CONTAINER_WP_NAME/g" "$WEB_BASE_PATH/.env"
+sed -i "s/containerwpname/$CONTAINER_NAME/g" "$WEB_BASE_PATH/.env"
 
 cd $WEB_BASE_PATH || exit
 
