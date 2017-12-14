@@ -2,8 +2,6 @@
 
 INSTALL_DIR=$PWD
 COMPANION_INSTALLLED=1
-WORDPRESS_IMAGE="wordpress:latest"
-DB_IMAGE="mariadb:latest"
 
 #
 # Network name
@@ -13,24 +11,24 @@ DB_IMAGE="mariadb:latest"
 #
 NETWORK="webproxy"
 
-# Path to store your database
-DB_PATH="/path/to/your/local/database/folder"
-
 # Root password for your database
-MYSQL_ROOT_PASSWORD="mysqlrootpassword"
+MYSQL_ROOT_PASSWORD=$(cat /dev/random | LC_CTYPE=C tr -dc "[:alpha:]" | head -c 20)
 
 # Database name, user and password for your wordpress
-MYSQL_DATABASE="mysqldatabase"
-MYSQL_USER="mysqluser"
-MYSQL_PASSWORD="mysqlpassword"
-
-# Path to store your wordpress files
-WP_CORE="/path/to/your/wordpress/core/files"
-WP_CONTENT="/path/to/your/wordpress/wp-content"
+MYSQL_DATABASE=$(cat /dev/random | LC_CTYPE=C tr -dc "[:alpha:]" | head -c 6)
+MYSQL_USER=$(cat /dev/random | LC_CTYPE=C tr -dc "[:alpha:]" | head -c 6)
+MYSQL_PASSWORD=$(cat /dev/random | LC_CTYPE=C tr -dc "[:alpha:]" | head -c 20)
 
 # Table prefix
 WORDPRESS_TABLE_PREFIX="wp_"
 
+# WordPress docker image
+WORDPRESS_IMAGE="wordpress:latest"
+
+# DB Dockeer image
+DB_IMAGE="mariadb:latest"
+
+# Assign variables from arguments
 while [ "$1" != "" ]; do
     case $1 in
         -CONTAINER_NAME  )   shift	
@@ -63,34 +61,6 @@ then
     exit 1;
 fi
 
-#
-# Database Container configuration
-# We recommend MySQL or MariaDB - please update docker-compose file if needed.
-#
-CONTAINER_DB_NAME="$CONTAINER_NAME_db"
-
-#
-# Wordpress Container configuration
-#
-CONTAINER_WP_NAME="$CONTAINER_NAME_wp"
-
-WEB_BASE_PATH="$INSTALL_DIR/web/$CONTAINER_NAME"
-
-if [ $DB_PATH = "/path/to/your/local/database/folder" ]
-then
-    DB_PATH="$WEB_BASE_PATH/db"
-fi
-
-if [ $WP_CORE = "/path/to/your/wordpress/core/files" ]
-then
-    WP_CORE="$WEB_BASE_PATH/public"
-fi
-
-if [ $WP_CONTENT = "/path/to/your/wordpress/wp-content" ]
-then
-    WP_CONTENT="$WEB_BASE_PATH/public/wp-content"
-fi
-
 if [ -z "$DOMAINS" ]
 then
     echo "Please specify -DOMAINS parameter";
@@ -121,6 +91,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
 fi
 docker-compose -v
 
+# Check and install docker-compose-letsencrypt-nginx-proxy-companion
 if [ ! "$(docker ps -q -f name=nginx-web)" ]; then
     COMPANION_INSTALLLED=0;
 fi
@@ -135,14 +106,25 @@ fi
 
 if [ $COMPANION_INSTALLLED = "0" ]
 then
-    echo "Installing companion"
     # Stop and remove existing containers
-    docker stop nginx-web
-    docker rm nginx-web
-    docker stop nginx-gen
-    docker rm nginx-gen
-    docker stop nginx-letsencrypt
-    docker rm nginx-letsencrypt
+    if [ "$(docker ps -aq -f status=running -f name=nginx-web)" ]; then
+        docker stop nginx-web
+    fi
+    if [ "$(docker ps -q -f name=nginx-web)" ]; then
+        docker rm nginx-web
+    fi
+    if [ "$(docker ps -aq -f status=running -f name=nginx-gen)" ]; then
+        docker stop nginx-gen
+    fi
+    if [ "$(docker ps -q -f name=nginx-gen)" ]; then
+        docker rm nginx-gen
+    fi
+    if [ "$(docker ps -aq -f status=running -f name=nginx-letsencrypt)" ]; then
+        docker stop nginx-letsencrypt
+    fi
+    if [ "$(docker ps -q -f name=nginx-letsencrypt)" ]; then
+        docker rm nginx-letsencrypt
+    fi
 
     # Delete existing directories
     echo 'Delete existing directory "docker-compose-letsencrypt-nginx-proxy-companion"'
@@ -158,7 +140,7 @@ then
     echo 'Copy "docker-compose-letsencrypt-nginx-proxy-companion/.env.example" to "docker-compose-letsencrypt-nginx-proxy-companion/.env" file'
     yes | cp -f "$INSTALL_DIR/docker-compose-letsencrypt-nginx-proxy-companion/.env.sample" "$INSTALL_DIR/docker-compose-letsencrypt-nginx-proxy-companion/.env"
 
-    # Replace environtment settings
+    # Replace docker-compose-letsencrypt-nginx-proxy-companion environtment settings
     sed -i "s#/path/to/your/nginx/data#$INSTALL_DIR/nginx-conf#g" "$INSTALL_DIR/docker-compose-letsencrypt-nginx-proxy-companion/.env"
 
     # Run the docker-compose-letsencrypt-nginx-proxy-companion installer
@@ -166,11 +148,19 @@ then
     ./start.sh
 fi
 
+# Set Web base path variable
+WEB_BASE_PATH="$INSTALL_DIR/web/$CONTAINER_NAME"
+
+# Create Web base path directory
 mkdir -p $WEB_BASE_PATH
 
+# Copy docker-compose.yml template file
 yes | cp -f "$INSTALL_DIR/docker-compose.yml.tmpl" "$WEB_BASE_PATH/docker-compose.yml"
+
+# Copy .env template file
 yes | cp -f "$INSTALL_DIR/.env.tmpl" "$WEB_BASE_PATH/.env"
 
+# Replace environtment settings
 sed -i "s/domain.com,www.domain.com/$DOMAINS/g" "$WEB_BASE_PATH/.env"
 sed -i "s/user@domain.com/$LETSENCRYPT_EMAIL/g" "$WEB_BASE_PATH/.env"
 sed -i "s/mysqlrootpassword/$MYSQL_ROOT_PASSWORD/g" "$WEB_BASE_PATH/.env"
@@ -183,6 +173,8 @@ sed -i "s/containerdbname/$CONTAINER_NAME/g" "$WEB_BASE_PATH/.env"
 sed -i "s/wordpress:latest/$WORDPRESS_IMAGE/g" "$WEB_BASE_PATH/.env"
 sed -i "s/containerwpname/$CONTAINER_NAME/g" "$WEB_BASE_PATH/.env"
 
+# Change directory to Web base path
 cd $WEB_BASE_PATH || exit
 
+# Execute docker-compose.yml file
 docker-compose up -d
