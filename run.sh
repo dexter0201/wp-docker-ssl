@@ -1,7 +1,7 @@
 #!/bin/bash
 
 INSTALL_DIR=$PWD
-COMPANION_INSTALLLED=1
+INSTALL_COMPANION=0
 
 #
 # Network name
@@ -92,20 +92,21 @@ fi
 docker-compose -v
 
 # Check and install docker-compose-letsencrypt-nginx-proxy-companion
-if [ ! "$(docker ps -q -f name=nginx-web)" ]; then
-    COMPANION_INSTALLLED=0;
+if [ ! "$(docker ps -aq -f status=running -f name=nginx-web)" ]; then
+    INSTALL_COMPANION=1;
 fi
 
-if [ ! "$(docker ps -q -f name=nginx-gen)" ]; then
-    COMPANION_INSTALLLED=0;
+if [ ! "$(docker ps -aq -f status=running -f name=nginx-gen)" ]; then
+    INSTALL_COMPANION=1;
 fi
 
-if [ ! "$(docker ps -q -f name=nginx-letsencrypt)" ]; then
-    COMPANION_INSTALLLED=0;
+if [ ! "$(docker ps -aq -f status=running -f name=nginx-letsencrypt)" ]; then
+    INSTALL_COMPANION=1;
 fi
 
-if [ $COMPANION_INSTALLLED = "0" ]
+if [ $INSTALL_COMPANION = "1" ]
 then
+    COMPANION_DIR="companion"
     # Stop and remove existing containers
     if [ "$(docker ps -aq -f status=running -f name=nginx-web)" ]; then
         docker stop nginx-web
@@ -126,25 +127,23 @@ then
         docker rm nginx-letsencrypt
     fi
 
-    # Delete existing directories
-    echo 'Delete existing directory "docker-compose-letsencrypt-nginx-proxy-companion"'
-    rm -rf "$INSTALL_DIR/docker-compose-letsencrypt-nginx-proxy-companion"
+    # Delete existing docker-compose-letsencrypt-nginx-proxy-companion directory
+    rm -rf "$INSTALL_DIR/$COMPANION_DIR"
 
-    echo 'Delete existing directory "nginx"'
-    rm -rf "$INSTALL_DIR/nginx"
+    # Delete existing nginx-conf directory
+    rm -rf "$INSTALL_DIR/nginx-conf"
 
     # Clone docker-compose-letsencrypt-nginx-proxy-companion github repo
-    git clone https://github.com/evertramos/docker-compose-letsencrypt-nginx-proxy-companion.git
+    git clone https://github.com/evertramos/docker-compose-letsencrypt-nginx-proxy-companion.git $COMPANION_DIR
 
     # Copy environtment file
-    echo 'Copy "docker-compose-letsencrypt-nginx-proxy-companion/.env.example" to "docker-compose-letsencrypt-nginx-proxy-companion/.env" file'
-    yes | cp -f "$INSTALL_DIR/docker-compose-letsencrypt-nginx-proxy-companion/.env.sample" "$INSTALL_DIR/docker-compose-letsencrypt-nginx-proxy-companion/.env"
+    yes | cp -f "$INSTALL_DIR/$COMPANION_DIR/.env.sample" "$INSTALL_DIR/$COMPANION_DIR/.env"
 
     # Replace docker-compose-letsencrypt-nginx-proxy-companion environtment settings
-    sed -i "s#/path/to/your/nginx/data#$INSTALL_DIR/nginx-conf#g" "$INSTALL_DIR/docker-compose-letsencrypt-nginx-proxy-companion/.env"
+    sed -i "s#/path/to/your/nginx/data#$INSTALL_DIR/nginx-conf#g" "$INSTALL_DIR/$COMPANION_DIR/.env"
 
     # Run the docker-compose-letsencrypt-nginx-proxy-companion installer
-    cd "$INSTALL_DIR/docker-compose-letsencrypt-nginx-proxy-companion" || exit
+    cd "$INSTALL_DIR/$COMPANION_DIR" || exit
     ./start.sh
 fi
 
