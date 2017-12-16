@@ -51,6 +51,8 @@ while [ "$1" != "" ]; do
             WORDPRESS_IMAGE=$1;;
         --DB_IMAGE ) shift
             DB_IMAGE=$1;;
+        --WORDPRESS_TABLE_PREFIX ) shift
+            WORDPRESS_TABLE_PREFIX=$1;;
     esac
 shift
 done
@@ -171,6 +173,7 @@ sed -i "s/mariadb:latest/$DB_IMAGE/g" "$WEB_BASE_PATH/.env"
 sed -i "s/containerdbname/$CONTAINER_NAME/g" "$WEB_BASE_PATH/.env"
 sed -i "s/wordpress:latest/$WORDPRESS_IMAGE/g" "$WEB_BASE_PATH/.env"
 sed -i "s/containerwpname/$CONTAINER_NAME/g" "$WEB_BASE_PATH/.env"
+sed -i "s/wp_tbl_/$WORDPRESS_TABLE_PREFIX/g" "$WEB_BASE_PATH/.env"
 
 # Change directory to Web base path
 cd $WEB_BASE_PATH || exit
