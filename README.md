@@ -7,7 +7,7 @@ Install Wordpress in Docker with SSL enabled integrated with NGINX proxy and aut
  1. Clone this repository:
 `git clone https://github.com/sofyansitorus/wp-docker-dev.git`
  2. Then run command:
-`./run.sh --CONTAINER_NAME mywpcontainer --DOMAINS mydomain.com,www.mydomain.com --LETSENCRYPT_EMAIL user@mydomain.com`
+`./run.sh -c mycontainername -d mydomain.com,www.mydomain.com -e user@emaildomain.com`
  3. Create new DNS A Record pointing to your server IP address.
  4. To install another vhost/domain, just repeat step 2 and 3 above.
 
