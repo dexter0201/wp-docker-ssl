@@ -164,7 +164,7 @@ mkdir -p $WEB_BASE_PATH
 yes | cp -f "$INSTALL_DIR/Dockerfile.tmpl" "$WEB_BASE_PATH/Dockerfile"
 
 # Replace Dockerfile environtment settings
-sed -i "s/wordpress:latest#$WORDPRESS_IMAGE#g" "$WEB_BASE_PATH/Dockerfile"
+sed -i "s/wordpress_image#$WORDPRESS_IMAGE#g" "$WEB_BASE_PATH/Dockerfile"
 
 # Copy docker-compose.yml template file
 yes | cp -f "$INSTALL_DIR/docker-compose.yml.tmpl" "$WEB_BASE_PATH/docker-compose.yml"
