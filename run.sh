@@ -77,19 +77,15 @@ fi
 
 # Install docker
 if ! [ -x "$(command -v docker)" ]; then
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-    apt-get update
-    apt-cache policy docker-ce
-    apt-get install -y docker-ce
-    usermod -aG docker "${USER}"
+    echo "Docker Engine is not installed. Please visit https://docs.docker.com/engine/installation/ to install Docker"
+    exit 1
 fi
 docker -v
 
 # Install docker-compose
 if ! [ -x "$(command -v docker-compose)" ]; then
-    curl -o /usr/local/bin/docker-compose -L "https://github.com/docker/compose/releases/download/1.15.0/docker-compose-$(uname -s)-$(uname -m)"
-    chmod +x /usr/local/bin/docker-compose
+    echo "Docker Compose is not installed. Please visit https://docs.docker.com/compose/install/ to install Docker Compose"
+    exit 1
 fi
 docker-compose -v
 
