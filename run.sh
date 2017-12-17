@@ -40,7 +40,8 @@ while [ "$1" != "" ]; do
             LETSENCRYPT_EMAIL=$1
             ;;
         --network |-n ) shift
-            NETWORK=$1;;
+            NETWORK=$1
+            ;;
         --mysql_root_password |-mr ) shift
             MYSQL_ROOT_PASSWORD=$1
             ;;
@@ -67,19 +68,19 @@ done
 
 if [ -z "$CONTAINER_NAME" ]
 then
-    echo "Please specify --CONTAINER_NAME parameter"
+    echo "Please specify --container_name parameter"
     exit 1
 fi
 
 if [ -z "$DOMAINS" ]
 then
-    echo "Please specify --DOMAINS parameter"
+    echo "Please specify --domains parameter"
     exit 1
 fi
 
 if [ -z "$LETSENCRYPT_EMAIL" ]
 then
-    echo "Please specify --LETSENCRYPT_EMAIL parameter"
+    echo "Please specify --letsencrypt_email parameter"
     exit 1
 fi
 
