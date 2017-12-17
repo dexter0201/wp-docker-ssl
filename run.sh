@@ -31,27 +31,27 @@ DB_IMAGE="mariadb:latest"
 # Assign variables from arguments
 while [ "$1" != "" ]; do
     case $1 in
-        --CONTAINER_NAME  )   shift	
+        --CONTAINER_NAME |-c )   shift	
             CONTAINER_NAME=$1;;  
-        --DOMAINS  )   shift
+        --DOMAINS |-d )   shift
             DOMAINS=$1;;
-        --LETSENCRYPT_EMAIL ) shift
+        --LETSENCRYPT_EMAIL |-e ) shift
             LETSENCRYPT_EMAIL=$1;;
-        --NETWORK ) shift
+        --NETWORK |-n ) shift
             NETWORK=$1;;
-        --MYSQL_ROOT_PASSWORD ) shift
+        --MYSQL_ROOT_PASSWORD |-mr ) shift
             MYSQL_ROOT_PASSWORD=$1;;
-        --MYSQL_DATABASE ) shift
+        --MYSQL_DATABASE |-md ) shift
             MYSQL_DATABASE=$1;;
-        --MYSQL_USER ) shift
+        --MYSQL_USER |-mu ) shift
             MYSQL_USER=$1;;
-        --MYSQL_PASSWORD ) shift
+        --MYSQL_PASSWORD |-mp ) shift
             MYSQL_PASSWORD=$1;;
-        --WORDPRESS_IMAGE ) shift
+        --WORDPRESS_IMAGE |-wi ) shift
             WORDPRESS_IMAGE=$1;;
-        --DB_IMAGE ) shift
+        --DB_IMAGE |-di ) shift
             DB_IMAGE=$1;;
-        --WORDPRESS_TABLE_PREFIX ) shift
+        --WORDPRESS_TABLE_PREFIX |-t ) shift
             WORDPRESS_TABLE_PREFIX=$1;;
     esac
 shift
