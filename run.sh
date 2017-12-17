@@ -146,7 +146,8 @@ then
     yes | cp -f "$INSTALL_DIR/$COMPANION_DIR/.env.sample" "$INSTALL_DIR/$COMPANION_DIR/.env"
 
     # Replace docker-compose-letsencrypt-nginx-proxy-companion environtment settings
-    sed -i "s#/path/to/your/nginx/data#$INSTALL_DIR/nginx-conf#g" "$INSTALL_DIR/$COMPANION_DIR/.env"
+    sed -i "s#=webproxy#=$NETWORK#g" "$INSTALL_DIR/$COMPANION_DIR/.env"
+    sed -i "s#=/path/to/your/nginx/data#=$INSTALL_DIR/nginx-conf#g" "$INSTALL_DIR/$COMPANION_DIR/.env"
 
     # Run the docker-compose-letsencrypt-nginx-proxy-companion installer
     cd "$INSTALL_DIR/$COMPANION_DIR" || exit
@@ -166,18 +167,18 @@ yes | cp -f "$INSTALL_DIR/docker-compose.yml.tmpl" "$WEB_BASE_PATH/docker-compos
 yes | cp -f "$INSTALL_DIR/.env.tmpl" "$WEB_BASE_PATH/.env"
 
 # Replace environtment settings
-sed -i "s/domain.com,www.domain.com/$DOMAINS/g" "$WEB_BASE_PATH/.env"
-sed -i "s/user@domain.com/$LETSENCRYPT_EMAIL/g" "$WEB_BASE_PATH/.env"
-sed -i "s/mysqlrootpassword/$MYSQL_ROOT_PASSWORD/g" "$WEB_BASE_PATH/.env"
-sed -i "s/mysqldatabase/$MYSQL_DATABASE/g" "$WEB_BASE_PATH/.env"
-sed -i "s/mysqluser/$MYSQL_USER/g" "$WEB_BASE_PATH/.env"
-sed -i "s/mysqlpassword/$MYSQL_PASSWORD/g" "$WEB_BASE_PATH/.env"
-sed -i "s/networkname/$NETWORK/g" "$WEB_BASE_PATH/.env"
-sed -i "s/mariadb:latest/$DB_IMAGE/g" "$WEB_BASE_PATH/.env"
-sed -i "s/containerdbname/$CONTAINER_NAME/g" "$WEB_BASE_PATH/.env"
-sed -i "s/wordpress:latest/$WORDPRESS_IMAGE/g" "$WEB_BASE_PATH/.env"
-sed -i "s/containerwpname/$CONTAINER_NAME/g" "$WEB_BASE_PATH/.env"
-sed -i "s/wp_tbl_/$WORDPRESS_TABLE_PREFIX/g" "$WEB_BASE_PATH/.env"
+sed -i "s/=domain.com,www.domain.com#=$DOMAINS#g" "$WEB_BASE_PATH/.env"
+sed -i "s#=user@domain.com#=$LETSENCRYPT_EMAIL#g" "$WEB_BASE_PATH/.env"
+sed -i "s#=mysqlrootpassword#=$MYSQL_ROOT_PASSWORD#g" "$WEB_BASE_PATH/.env"
+sed -i "s#=mysqldatabase#=$MYSQL_DATABASE#g" "$WEB_BASE_PATH/.env"
+sed -i "s#=mysqluser#=$MYSQL_USER#g" "$WEB_BASE_PATH/.env"
+sed -i "s#=mysqlpassword#=$MYSQL_PASSWORD#g" "$WEB_BASE_PATH/.env"
+sed -i "s#=networkname#=$NETWORK#g" "$WEB_BASE_PATH/.env"
+sed -i "s#=mariadb:latest#=$DB_IMAGE#g" "$WEB_BASE_PATH/.env"
+sed -i "s#=containerdbname#=$CONTAINER_NAME#g" "$WEB_BASE_PATH/.env"
+sed -i "s#=wordpress:latest#=$WORDPRESS_IMAGE#g" "$WEB_BASE_PATH/.env"
+sed -i "s#=containerwpname#=$CONTAINER_NAME#g" "$WEB_BASE_PATH/.env"
+sed -i "s#=wp_tbl_#=$WORDPRESS_TABLE_PREFIX#g" "$WEB_BASE_PATH/.env"
 
 # Change directory to Web base path
 cd $WEB_BASE_PATH || exit
