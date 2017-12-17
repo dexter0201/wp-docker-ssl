@@ -164,7 +164,7 @@ mkdir -p $WEB_BASE_PATH
 yes | cp -f "$INSTALL_DIR/Dockerfile.tmpl" "$WEB_BASE_PATH/Dockerfile"
 
 # Replace Dockerfile environtment settings
-sed -i "s/wordpress_image#$WORDPRESS_IMAGE#g" "$WEB_BASE_PATH/Dockerfile"
+sed -i "s#wordpress_image#$WORDPRESS_IMAGE#g" "$WEB_BASE_PATH/Dockerfile"
 
 # Copy docker-compose.yml template file
 yes | cp -f "$INSTALL_DIR/docker-compose.yml.tmpl" "$WEB_BASE_PATH/docker-compose.yml"
@@ -173,7 +173,7 @@ yes | cp -f "$INSTALL_DIR/docker-compose.yml.tmpl" "$WEB_BASE_PATH/docker-compos
 yes | cp -f "$INSTALL_DIR/.env.tmpl" "$WEB_BASE_PATH/.env"
 
 # Replace docker-compose file environtment settings
-sed -i "s/=domain.com,www.domain.com#=$DOMAINS#g" "$WEB_BASE_PATH/.env"
+sed -i "s#=domain.com,www.domain.com#=$DOMAINS#g" "$WEB_BASE_PATH/.env"
 sed -i "s#=user@domain.com#=$LETSENCRYPT_EMAIL#g" "$WEB_BASE_PATH/.env"
 sed -i "s#=mysqlrootpassword#=$MYSQL_ROOT_PASSWORD#g" "$WEB_BASE_PATH/.env"
 sed -i "s#=mysqldatabase#=$MYSQL_DATABASE#g" "$WEB_BASE_PATH/.env"
