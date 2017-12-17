@@ -31,34 +31,34 @@ DB_IMAGE="mariadb:latest"
 # Assign variables from arguments
 while [ "$1" != "" ]; do
     case $1 in
-        --CONTAINER_NAME |-c ) shift	
+        --container_name |-c ) shift	
             CONTAINER_NAME=$1
             ;;  
-        --DOMAINS |-d )   shift
+        --domains |-d )   shift
             DOMAINS=$1;;
-        --LETSENCRYPT_EMAIL |-e ) shift
+        --letsencrypt_email |-e ) shift
             LETSENCRYPT_EMAIL=$1
             ;;
-        --NETWORK |-n ) shift
+        --network |-n ) shift
             NETWORK=$1;;
-        --MYSQL_ROOT_PASSWORD |-mr ) shift
+        --mysql_root_password |-mr ) shift
             MYSQL_ROOT_PASSWORD=$1
             ;;
-        --MYSQL_DATABASE |-md ) shift
+        --mysql_database |-md ) shift
             MYSQL_DATABASE=$1
             ;;
-        --MYSQL_USER |-mu ) shift
+        --mysql_user |-mu ) shift
             MYSQL_USER=$1;;
-        --MYSQL_PASSWORD |-mp ) shift
+        --mysql_password |-mp ) shift
             MYSQL_PASSWORD=$1
             ;;
-        --WORDPRESS_IMAGE |-wi ) shift
+        --wordpress_image |-wi ) shift
             WORDPRESS_IMAGE=$1
             ;;
-        --DB_IMAGE |-di ) shift
+        --db_image |-di ) shift
             DB_IMAGE=$1
             ;;
-        --WORDPRESS_TABLE_PREFIX |-t ) shift
+        --wordpress_table_prefix |-t ) shift
             WORDPRESS_TABLE_PREFIX=$1
             ;;
     esac
