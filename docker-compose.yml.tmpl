@@ -17,7 +17,8 @@ services:
      depends_on:
        - db
      container_name: ${CONTAINER_WP_NAME}
-     context: .
+     build:
+       context: .
      restart: unless-stopped
      volumes:
        - ./html:/var/www/html
