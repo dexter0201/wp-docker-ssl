@@ -1,5 +1,5 @@
 # wp-docker-dev
-Install Wordpress in Docker with SSL enabled integrated with NGINX proxy and auto-renew LetsEncrypt certificates.
+Install Wordpress in Docker with SSL enabled integrated with NGINX proxy and auto-renew LetsEncrypt certificates. Come with WP_CLI installed.
 
 ----------
 
@@ -14,13 +14,14 @@ Install Wordpress in Docker with SSL enabled integrated with NGINX proxy and aut
 ----------
 ### Availabe options/arguments:
 
- 1. `--CONTAINER_NAME` (Required)
- 2. `--DOMAINS` (Required, Separate with comma for multiple domain)
- 3. `--LETSENCRYPT_EMAIL` (Required)
- 4. `--NETWORK` (Optional, Default = webproxy)
- 5. `--MYSQL_ROOT_PASSWORD` (Optional, Default = random string 20 characters)
- 6. `--MYSQL_DATABASE` (Optional, Default = random string 6 characters)
- 7. `--MYSQL_USER` (Optional, Default = random string 6 characters)
- 8. `--MYSQL_PASSWORD` (Optional, Default = random string 20 characters)
- 8. `--WORDPRESS_IMAGE` (Optional, Default = wordpress:latest, Available tags: https://hub.docker.com/_/wordpress/)
- 9. `--DB_IMAGE` (Optional, Default = mariadb:latest, Available tags https://hub.docker.com/_/mariadb/, https://hub.docker.com/_/mysql/)
+ 1. `--container_name` or `-c` (Required)
+ 2. `--domains` or `-d` (Required, Separate with comma for multiple domain)
+ 3. `--letsencrypt_email` or `-e- (Required)
+ 4. `--network` or `-n` (Optional, Default = webproxy)
+ 5. `--mysql_root_password` or `-mr` (Optional, Default = random string 20 characters)
+ 6. `--mysql_database` or `-md` (Optional, Default = random string 6 characters)
+ 7. `--mysql_user` or `-mu` (Optional, Default = random string 6 characters)
+ 8. `--mysql_password` or `-mp` (Optional, Default = random string 20 characters)
+ 8. `--wordpress_image` or `-wi` (Optional, Default = wordpress:latest, Available tags: https://hub.docker.com/_/wordpress/)
+ 9. `--db_image` or `-di` (Optional, Default = mariadb:latest, Available tags https://hub.docker.com/_/mariadb/, https://hub.docker.com/_/mysql/)
+ 10. `--wordpress_table_prefix` or `-t` (Optional, Default = wp_)
