@@ -16,7 +16,7 @@ Install Wordpress in Docker with SSL enabled integrated with NGINX proxy and aut
 
  1. `--container_name` or `-c` (Required)
  2. `--domains` or `-d` (Required, Separate with comma for multiple domain)
- 3. `--letsencrypt_email` or `-e- (Required)
+ 3. `--letsencrypt_email` or `-e` (Required)
  4. `--network` or `-n` (Optional, Default = webproxy)
  5. `--mysql_root_password` or `-mr` (Optional, Default = random string 20 characters)
  6. `--mysql_database` or `-md` (Optional, Default = random string 6 characters)
