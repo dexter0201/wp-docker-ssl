@@ -31,48 +31,56 @@ DB_IMAGE="mariadb:latest"
 # Assign variables from arguments
 while [ "$1" != "" ]; do
     case $1 in
-        --CONTAINER_NAME |-c )   shift	
-            CONTAINER_NAME=$1;;  
+        --CONTAINER_NAME |-c ) shift	
+            CONTAINER_NAME=$1
+            ;;  
         --DOMAINS |-d )   shift
             DOMAINS=$1;;
         --LETSENCRYPT_EMAIL |-e ) shift
-            LETSENCRYPT_EMAIL=$1;;
+            LETSENCRYPT_EMAIL=$1
+            ;;
         --NETWORK |-n ) shift
             NETWORK=$1;;
         --MYSQL_ROOT_PASSWORD |-mr ) shift
-            MYSQL_ROOT_PASSWORD=$1;;
+            MYSQL_ROOT_PASSWORD=$1
+            ;;
         --MYSQL_DATABASE |-md ) shift
-            MYSQL_DATABASE=$1;;
+            MYSQL_DATABASE=$1
+            ;;
         --MYSQL_USER |-mu ) shift
             MYSQL_USER=$1;;
         --MYSQL_PASSWORD |-mp ) shift
-            MYSQL_PASSWORD=$1;;
+            MYSQL_PASSWORD=$1
+            ;;
         --WORDPRESS_IMAGE |-wi ) shift
-            WORDPRESS_IMAGE=$1;;
+            WORDPRESS_IMAGE=$1
+            ;;
         --DB_IMAGE |-di ) shift
-            DB_IMAGE=$1;;
+            DB_IMAGE=$1
+            ;;
         --WORDPRESS_TABLE_PREFIX |-t ) shift
-            WORDPRESS_TABLE_PREFIX=$1;;
+            WORDPRESS_TABLE_PREFIX=$1
+            ;;
     esac
 shift
 done
 
 if [ -z "$CONTAINER_NAME" ]
 then
-    echo "Please specify --CONTAINER_NAME parameter";
-    exit 1;
+    echo "Please specify --CONTAINER_NAME parameter"
+    exit 1
 fi
 
 if [ -z "$DOMAINS" ]
 then
-    echo "Please specify --DOMAINS parameter";
-    exit 1;
+    echo "Please specify --DOMAINS parameter"
+    exit 1
 fi
 
 if [ -z "$LETSENCRYPT_EMAIL" ]
 then
-    echo "Please specify --LETSENCRYPT_EMAIL parameter";
-    exit 1;
+    echo "Please specify --LETSENCRYPT_EMAIL parameter"
+    exit 1
 fi
 
 # Install docker
@@ -91,15 +99,15 @@ docker-compose -v
 
 # Check and install docker-compose-letsencrypt-nginx-proxy-companion
 if [ ! "$(docker ps -aq -f status=running -f name=nginx-web)" ]; then
-    INSTALL_COMPANION=1;
+    INSTALL_COMPANION=1
 fi
 
 if [ ! "$(docker ps -aq -f status=running -f name=nginx-gen)" ]; then
-    INSTALL_COMPANION=1;
+    INSTALL_COMPANION=1
 fi
 
 if [ ! "$(docker ps -aq -f status=running -f name=nginx-letsencrypt)" ]; then
-    INSTALL_COMPANION=1;
+    INSTALL_COMPANION=1
 fi
 
 if [ $INSTALL_COMPANION = "1" ]
