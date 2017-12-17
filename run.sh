@@ -190,5 +190,8 @@ sed -i "s#=wp_tbl_#=$WORDPRESS_TABLE_PREFIX#g" "$WEB_BASE_PATH/.env"
 # Change directory to Web base path
 cd $WEB_BASE_PATH || exit
 
-# Execute docker-compose.yml file
+# Try to stop existing running containers
+docker-compose stop
+
+# Builds, (re)creates, starts, and attaches to containers for a service.
 docker-compose up -d
