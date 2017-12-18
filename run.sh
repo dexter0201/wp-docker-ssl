@@ -26,49 +26,64 @@ WORDPRESS_TABLE_PREFIX="wp_"
 WORDPRESS_IMAGE="wordpress:latest"
 
 # DB Dockeer image
-DB_IMAGE="mariadb:latest"
+DATABASE_IMAGE="mariadb:latest"
+
+WORDPRESS_ADMIN_USER="changeme"
+WORDPRESS_ADMIN_PASSWORD="changeme"
+WORDPRESS_SITE_TITLE="Just another WordPress site"
 
 # Assign variables from arguments
 while [ "$1" != "" ]; do
     case $1 in
-        --container_name |-c ) shift	
-            CONTAINER_NAME=$1
+        --container |-c ) shift	
+            CONTAINER=$1
             ;;  
         --domains |-d )   shift
-            DOMAINS=$1;;
-        --letsencrypt_email |-e ) shift
-            LETSENCRYPT_EMAIL=$1
+            DOMAINS=$1
+            ;;
+        --email |-e ) shift
+            EMAIL=$1
             ;;
         --network |-n ) shift
             NETWORK=$1
             ;;
-        --mysql_root_password |-mr ) shift
+        --mysql_root_password |-mrp ) shift
             MYSQL_ROOT_PASSWORD=$1
             ;;
         --mysql_database |-md ) shift
             MYSQL_DATABASE=$1
             ;;
         --mysql_user |-mu ) shift
-            MYSQL_USER=$1;;
+            MYSQL_USER=$1
+            ;;
         --mysql_password |-mp ) shift
             MYSQL_PASSWORD=$1
             ;;
-        --wordpress_image |-wi ) shift
+        --wordpress_image |-wpi ) shift
             WORDPRESS_IMAGE=$1
             ;;
-        --db_image |-di ) shift
-            DB_IMAGE=$1
+        --database_image |-dbi ) shift
+            DATABASE_IMAGE=$1
             ;;
-        --wordpress_table_prefix |-t ) shift
+        --wordpress_table_prefix |-wtp ) shift
             WORDPRESS_TABLE_PREFIX=$1
+            ;;
+        --wordpress_admin_user |-wau ) shift
+            WORDPRESS_ADMIN_USER=$1
+            ;;
+        --wordpress_admin_password |-wap ) shift
+            WORDPRESS_ADMIN_PASSWORD=$1
+            ;;
+        --wordpress_site_title |-wst ) shift
+            WORDPRESS_SITE_TITLE=$1
             ;;
     esac
 shift
 done
 
-if [ -z "$CONTAINER_NAME" ]
+if [ -z "$CONTAINER" ]
 then
-    echo "Please specify --container_name parameter"
+    echo "Please specify --container parameter"
     exit 1
 fi
 
@@ -78,11 +93,14 @@ then
     exit 1
 fi
 
-if [ -z "$LETSENCRYPT_EMAIL" ]
+if [ -z "$EMAIL" ]
 then
-    echo "Please specify --letsencrypt_email parameter"
+    echo "Please specify --email parameter"
     exit 1
 fi
+
+CONTAINER_DB="_db"
+CONTAINER_DB="$CONTAINER$CONTAINER_DB"
 
 # Install docker
 if ! [ -x "$(command -v docker)" ]; then
@@ -156,42 +174,47 @@ then
 fi
 
 # Set Web base path variable
-WEB_BASE_PATH="$INSTALL_DIR/web/$CONTAINER_NAME"
+WEB_BASE_PATH="$INSTALL_DIR/web/$CONTAINER"
 
 # Create Web base path directory
 mkdir -p $WEB_BASE_PATH
 
 # Copy Dockerfile template file
-yes | cp -f "$INSTALL_DIR/Dockerfile.tmpl" "$WEB_BASE_PATH/Dockerfile"
+yes | cp -f "$INSTALL_DIR/src/Dockerfile" "$WEB_BASE_PATH/Dockerfile"
 
 # Replace Dockerfile environtment settings
 sed -i "s#wordpress_image#$WORDPRESS_IMAGE#g" "$WEB_BASE_PATH/Dockerfile"
 
 # Copy docker-compose.yml template file
-yes | cp -f "$INSTALL_DIR/docker-compose.yml.tmpl" "$WEB_BASE_PATH/docker-compose.yml"
+yes | cp -f "$INSTALL_DIR/src/docker-compose.yml" "$WEB_BASE_PATH/docker-compose.yml"
 
 # Copy .env template file
-yes | cp -f "$INSTALL_DIR/.env.tmpl" "$WEB_BASE_PATH/.env"
+yes | cp -f "$INSTALL_DIR/src/.env" "$WEB_BASE_PATH/.env"
 
 # Replace docker-compose file environtment settings
+sed -i "s#=containername#=$CONTAINER#g" "$WEB_BASE_PATH/.env"
 sed -i "s#=domain.com,www.domain.com#=$DOMAINS#g" "$WEB_BASE_PATH/.env"
-sed -i "s#=user@domain.com#=$LETSENCRYPT_EMAIL#g" "$WEB_BASE_PATH/.env"
+sed -i "s#=user@domain.com#=$EMAIL#g" "$WEB_BASE_PATH/.env"
+sed -i "s#=mariadb:latest#=$DATABASE_IMAGE#g" "$WEB_BASE_PATH/.env"
+sed -i "s#=wordpress:latest#=$WORDPRESS_IMAGE#g" "$WEB_BASE_PATH/.env"
+sed -i "s#=networkname#=$NETWORK#g" "$WEB_BASE_PATH/.env"
 sed -i "s#=mysqlrootpassword#=$MYSQL_ROOT_PASSWORD#g" "$WEB_BASE_PATH/.env"
 sed -i "s#=mysqldatabase#=$MYSQL_DATABASE#g" "$WEB_BASE_PATH/.env"
 sed -i "s#=mysqluser#=$MYSQL_USER#g" "$WEB_BASE_PATH/.env"
 sed -i "s#=mysqlpassword#=$MYSQL_PASSWORD#g" "$WEB_BASE_PATH/.env"
-sed -i "s#=networkname#=$NETWORK#g" "$WEB_BASE_PATH/.env"
-sed -i "s#=mariadb:latest#=$DB_IMAGE#g" "$WEB_BASE_PATH/.env"
-sed -i "s#=containerdbname#=$CONTAINER_NAME#g" "$WEB_BASE_PATH/.env"
-sed -i "s#=wordpress:latest#=$WORDPRESS_IMAGE#g" "$WEB_BASE_PATH/.env"
-sed -i "s#=containerwpname#=$CONTAINER_NAME#g" "$WEB_BASE_PATH/.env"
 sed -i "s#=wp_tbl_#=$WORDPRESS_TABLE_PREFIX#g" "$WEB_BASE_PATH/.env"
 
 # Change directory to Web base path
 cd $WEB_BASE_PATH || exit
 
 # Try to stop existing running containers
-docker-compose stop
+sudo `which docker-compose` stop
 
 # Builds, (re)creates, starts, and attaches to containers for a service.
-docker-compose up -d
+sudo `which docker-compose` up -d --build
+
+cd $INSTALL_DIR || exit
+
+WORDPRESS_URL="$(cut -d',' -f1 <<<"$DOMAINS")"
+
+src/wait-for-it.sh -h $CONTAINER_DB -p 3306 -t 30 -- sudo `which docker` exec -u www-data $CONTAINER wp core install --path=/var/www/html --url=$WORDPRESS_URL --admin_email=$EMAIL --admin_user=$WORDPRESS_ADMIN_USER --admin_password=$WORDPRESS_ADMIN_PASSWORD --title="$WORDPRESS_SITE_TITLE"
