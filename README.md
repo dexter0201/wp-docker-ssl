@@ -1,5 +1,5 @@
 # wp-docker-dev
-Install Wordpress in Docker with SSL enabled integrated with NGINX proxy and auto-renew LetsEncrypt certificates. Come with WP_CLI installed.
+Install Wordpress in Docker with SSL enabled integrated with NGINX proxy and auto-renew LetsEncrypt certificates. Come with WP-CLI installed.
 
 ----------
 
@@ -14,14 +14,17 @@ Install Wordpress in Docker with SSL enabled integrated with NGINX proxy and aut
 ----------
 ### Availabe options/arguments:
 
- 1. `--container_name` or `-c` (Required)
+ 1. `--container` or `-c` (Required)
  2. `--domains` or `-d` (Required, Separate with comma for multiple domain)
- 3. `--letsencrypt_email` or `-e` (Required)
+ 3. `--email` or `-e` (Required)
  4. `--network` or `-n` (Optional, Default = webproxy)
- 5. `--mysql_root_password` or `-mr` (Optional, Default = random string 20 characters)
+ 5. `--mysql_root_password` or `-mrp` (Optional, Default = random string 20 characters)
  6. `--mysql_database` or `-md` (Optional, Default = random string 6 characters)
  7. `--mysql_user` or `-mu` (Optional, Default = random string 6 characters)
  8. `--mysql_password` or `-mp` (Optional, Default = random string 20 characters)
- 8. `--wordpress_image` or `-wi` (Optional, Default = wordpress:latest, Available tags: https://hub.docker.com/_/wordpress/)
- 9. `--db_image` or `-di` (Optional, Default = mariadb:latest, Available tags https://hub.docker.com/_/mariadb/, https://hub.docker.com/_/mysql/)
- 10. `--wordpress_table_prefix` or `-t` (Optional, Default = wp_)
+ 8. `--wordpress_image` or `-wpi` (Optional, Default = wordpress:latest, Available tags: https://hub.docker.com/_/wordpress/)
+ 9. `--database_image` or `-dbi` (Optional, Default = mariadb:latest, Available tags https://hub.docker.com/_/mariadb/, https://hub.docker.com/_/mysql/)
+ 10. `--wordpress_table_prefix` or `-wtp` (Optional, Default = wp_)
+ 11. `--wordpress_admin_user` or `-wau` (Optional, Default = changeme)
+ 12. `--wordpress_admin_password` or `-wap` (Optional, Default = changeme)
+ 13. `--wordpress_site_title` or `-wst` (Optional, Default = Just another WordPress site)
