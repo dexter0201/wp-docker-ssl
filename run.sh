@@ -217,4 +217,4 @@ cd $INSTALL_DIR || exit
 
 WORDPRESS_URL="$(cut -d',' -f1 <<<"$DOMAINS")"
 
-src/wait-for-it.sh -h $CONTAINER_DB -p 3306 -t 15 -- sudo `which docker` exec -u www-data $CONTAINER wp core install --path=/var/www/html --url=$WORDPRESS_URL --admin_email=$EMAIL --admin_user=$WORDPRESS_ADMIN_USER --admin_password=$WORDPRESS_ADMIN_PASSWORD --title="$WORDPRESS_SITE_TITLE" --skip-email
+./wait.sh -h $CONTAINER_DB -p 3306 -t 15 -- sudo `which docker` exec -u www-data $CONTAINER wp core install --path=/var/www/html --url=$WORDPRESS_URL --admin_email=$EMAIL --admin_user=$WORDPRESS_ADMIN_USER --admin_password=$WORDPRESS_ADMIN_PASSWORD --title="$WORDPRESS_SITE_TITLE" --skip-email
