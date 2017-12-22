@@ -81,12 +81,6 @@ while [ "$1" != "" ]; do
 shift
 done
 
-if [ -z "$CONTAINER" ]
-then
-    echo "Please specify --container parameter"
-    exit 1
-fi
-
 if [ -z "$DOMAINS" ]
 then
     echo "Please specify --domains parameter"
@@ -97,6 +91,11 @@ if [ -z "$EMAIL" ]
 then
     echo "Please specify --email parameter"
     exit 1
+fi
+
+if [ -z "$CONTAINER" ]
+then
+    CONTAINER="$(cut -d',' -f1 <<<"$DOMAINS")"
 fi
 
 CONTAINER_DB="_db"
