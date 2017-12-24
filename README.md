@@ -35,3 +35,8 @@ Run command: `./wp.sh containername any-wp-cli-command --wp-cli-args`
 ##### Example:
 
 `./wp.sh containername plugin install bbpress --activate`
+
+### Credits
+
+ 1. [evertramos/docker-compose-letsencrypt-nginx-proxy-companion](https://github.com/evertramos/docker-compose-letsencrypt-nginx-proxy-companion)
+ 2. [vishnubob/wait-for-it](https://github.com/vishnubob/wait-for-it)
