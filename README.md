@@ -1,4 +1,4 @@
-# wp-docker-dev
+# wp-docker-ssl
 Install Wordpress in Docker with SSL enabled integrated with NGINX proxy and auto-renew LetsEncrypt certificates. Come with WP-CLI installed.
 
 ----------
