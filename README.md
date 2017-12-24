@@ -12,7 +12,7 @@ Install Wordpress in Docker with SSL enabled integrated with NGINX proxy and aut
  3. Create new DNS A Record pointing to your server IP address.
  4. To install another vhost/domain, just repeat step 2 and 3 above.
  
-#### Availabe options/arguments:
+##### Availabe options/arguments:
  1. `--domains` or `-d` (Required, Separate with comma for multiple domain)
  2. `--email` or `-e` (Required)
  3. `--container` or `-c` (Optional, Default = domain parameter)
@@ -28,4 +28,10 @@ Install Wordpress in Docker with SSL enabled integrated with NGINX proxy and aut
  12. `--wordpress_admin_password` or `-wap` (Optional, Default = changeme)
  13. `--wordpress_site_title` or `-wst` (Optional, Default = Just another WordPress site)
 
-----------
+## Execute WP-CLI command:
+
+Run command: `./wp.sh containername any-wp-cli-command --wp-cli-args`
+
+##### Example:
+
+`./wp.sh containername plugin install bbpress --activate`
